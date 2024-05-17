@@ -22,14 +22,9 @@ header_1 = hex.find("55AAEB90", 0)
 header_2 = hex.find("55AAEB90", header_1+8)
 
 while header_2 != -1:
-  # print(header_1, header_2)
   measurements.append(hex[header_1:header_2])
   header_1 = header_2
   header_2 = hex.find("55AAEB90", header_1+8)
-
-# for i in range(0, len(hex)):
-#   if hex[i:i+4] == "55AA":
-#     measurements.append(hex[i:i+350])
 
 start_time = int(measurements[0][492:492+4], 16)
 
@@ -41,7 +36,6 @@ results = pd.DataFrame(columns=['frame', 'cell number', 'voltage', 'resistance',
 
 # Parse the data
 for m in measurements:
-  # print("----------------")
   voltages = bytes.fromhex(m[12:12+24])
   voltages_parsed = []
   for i in range(0, len(voltages), 2):
@@ -54,7 +48,6 @@ for m in measurements:
     r = int.from_bytes(resistances[i:i+2], byteorder='little', signed=False) * 0.001
     resistances_parsed.append(r)
   res.append((voltages_parsed, resistances_parsed))
-  # print(f"Time: {time_parsed}")+
 
   bytes = bytes.fromhex(m[316:316+8])
   current_parsed = int.from_bytes(bytes, byteorder='little', signed=True) * 0.001 
@@ -71,15 +64,6 @@ for m in measurements:
   results.loc[index] = [frame, 'cell_average', average_voltage, np.mean(resistances_parsed), current_parsed, power_parsed]
   index += 1
   frame += 1
-
-  # average_voltage = m[202:202+8]
-  # average_voltage_parsed = int(average_voltage, 32)
-
-  # print(f"Frame: {frame_counter}")
-  # print(f"Voltages: {voltages_parsed}")
-  # # print(f"Average voltage: {average_voltage_parsed}")
-  # print(f"Resistances: {resistances_parsed}")
-  # print(f"Current: {current_parsed}")
 
 print(results)
 
