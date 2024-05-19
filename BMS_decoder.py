@@ -38,7 +38,11 @@ for raw_data in data_to_process:
   index = 0
   frame = 1
 
-  results = pd.DataFrame(columns=['frame', 'cell number', 'voltage', 'resistance', 'current', 'power', 'temperature_1', 'temperature_2'])
+  start_time = bytes.fromhex(measurements[0][388:396])
+  start_time_parsed = int.from_bytes(start_time, byteorder='little', signed=False)
+  prev_time = 0
+
+  results = pd.DataFrame(columns=['frame', 'time', 'cell number', 'voltage', 'resistance', 'current', 'power', 'temperature_1', 'temperature_2'])
 
   # Parse the data
   for m in measurements:
@@ -69,11 +73,20 @@ for raw_data in data_to_process:
 
     frame_counter = int(m[10:12], 16)
 
+    time = bytes.fromhex(m[388:396])
+    time_parsed = int.from_bytes(time, byteorder='little', signed=False)
+    time_elapsed = time_parsed - start_time_parsed
+
+    if time_parsed == prev_time:
+      time_elapsed += 0.5
+
+    prev_time = time_parsed
+
     for i in range(len(voltages_parsed)):
-      results.loc[index] = [frame, f'cell_{i+1}', voltages_parsed[i], resistances_parsed[i], current_parsed, power_parsed, temp_1_parsed, temp_2_parsed]
+      results.loc[index] = [frame, time_elapsed, f'cell_{i+1}', voltages_parsed[i], resistances_parsed[i], current_parsed, power_parsed, temp_1_parsed, temp_2_parsed]
       index += 1
 
-    results.loc[index] = [frame, 'cell_average', average_voltage, np.mean(resistances_parsed), current_parsed, power_parsed, temp_1_parsed, temp_2_parsed]
+    results.loc[index] = [frame, time_elapsed, 'cell_average', average_voltage, np.mean(resistances_parsed), current_parsed, power_parsed, temp_1_parsed, temp_2_parsed]
     index += 1
     frame += 1
 
