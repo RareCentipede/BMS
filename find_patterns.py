@@ -29,9 +29,10 @@ for raw_data in data_to_process:
     header_2 = hex.find("55AAEB90", header_1+8)
 
 temp1 = 328
-temp2 = 343
+temp2 = 324
 
 for m in measurements:
+  print(m[temp1:temp1+4], m[temp2:temp2+4])
   # for i in range(0, len(m)-2):
   #   bytes_to_explore = bytes.fromhex(m[i:i+2])
   #   parsed_bytes = int.from_bytes(bytes_to_explore, byteorder='little', signed=False) * 0.1
