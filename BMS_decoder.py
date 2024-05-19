@@ -38,7 +38,7 @@ for raw_data in data_to_process:
   index = 0
   frame = 1
 
-  results = pd.DataFrame(columns=['frame', 'cell number', 'voltage', 'resistance', 'current', 'power'])
+  results = pd.DataFrame(columns=['frame', 'cell number', 'voltage', 'resistance', 'current', 'power', 'temperature'])
 
   # Parse the data
   for m in measurements:
@@ -61,13 +61,16 @@ for raw_data in data_to_process:
     average_voltage = np.mean(voltages_parsed)
     power_parsed = np.sum(voltages_parsed) * current_parsed
 
+    temperature = bytes.fromhex(m[328:330])
+    temp_parsed = int.from_bytes(temperature, byteorder='little', signed=False) * 0.1
+
     frame_counter = int(m[10:12], 16)
 
     for i in range(len(voltages_parsed)):
-      results.loc[index] = [frame, f'cell_{i+1}', voltages_parsed[i], resistances_parsed[i], current_parsed, power_parsed]
+      results.loc[index] = [frame, f'cell_{i+1}', voltages_parsed[i], resistances_parsed[i], current_parsed, power_parsed, temp_parsed]
       index += 1
 
-    results.loc[index] = [frame, 'cell_average', average_voltage, np.mean(resistances_parsed), current_parsed, power_parsed]
+    results.loc[index] = [frame, 'cell_average', average_voltage, np.mean(resistances_parsed), current_parsed, power_parsed, temp_parsed]
     index += 1
     frame += 1
 

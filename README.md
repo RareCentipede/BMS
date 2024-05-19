@@ -7,3 +7,9 @@
 # To plot data
 - Put the processed data you want to plot into `results/to_plot`
 - It will plot when readfy and saves the figures into `results/plots`
+
+# Command line arguments
+## The arguments can be used in any order
+- `temp` : Plots temperature data
+- `res` : Plots resistance data
+- `save` : Saves the plots
