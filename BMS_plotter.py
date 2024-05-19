@@ -68,7 +68,8 @@ ax_power.set_title('Power')
 ax_power.set_ylabel('Power (W)')
 
 if display_temp:
-    sns.lineplot(results, x='frame', y='temperature', hue='cell number', ax=ax_temp)
+    sns.lineplot(results, x='frame', y='temperature_1', ax=ax_temp, label="Pack 1")
+    sns.lineplot(results, x='frame', y='temperature_2', ax=ax_temp, label="Pack 2")
     ax_temp.set_title('Temperature')
     ax_temp.set_ylabel('Temperature (°C)')
 
