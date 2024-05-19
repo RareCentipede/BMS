@@ -77,7 +77,7 @@ if display_temp:
 if display_res:
     sns.lineplot(results, x='frame', y='resistance', hue='cell number', ax=ax_res, legend=True)
     ax_res.set_title('Resistances')
-    ax_res.set_ylabel('Resistance ($\Omega$)')
+    ax_res.set_ylabel('Resistance ($\Omega$)') # type: ignore
 
 plot_name = data_to_plot.replace(data_path, "").replace("results_", "").replace(".csv", "")
 
