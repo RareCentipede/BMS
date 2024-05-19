@@ -11,7 +11,7 @@ data_to_plot = [data_path + f for f in listdir(data_path) if isfile(join(data_pa
 results = pd.read_csv(data_to_plot)
 
 # plot voltages
-f, axes = plt.subplots(3, 1, sharex=True)
+f, axes = plt.subplots(3, 1, sharex=True, figsize=(20, 10))
 ax_volt = axes[0]
 # ax_res = axes[1]
 ax_cur = axes[1]
@@ -38,5 +38,5 @@ ax_power.set_title('Power')
 ax_power.set_ylabel('Power (W)')
 
 plot_name = data_to_plot.replace(data_path, "").replace("results_", "").replace(".csv", "")
-f.savefig(f'Results/plots/plot_{plot_name}.png')
+f.savefig(f'Results/plots/plot_{plot_name}.png', dpi=300)
 plt.show()
